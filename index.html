@@ -1,13 +1,201 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Empresarial - ISP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Panel de Bandeja -->
+    <aside class="bandeja-panel">
+      <div class="bandeja-header">
+        <div class="company-name">ISP Solutions</div>
+        <div class="section-title">Chats en vivo</div>
+      </div>
+      
+      <div class="stats-section">
+        <div class="stat-item active" data-filter="asesor3">
+          <span class="stat-name">Tú</span>
+          <span class="stat-count" id="my-count">2</span>
+        </div>
+        <div class="stat-item" data-filter="sin-asignar">
+          <span class="stat-name">Sin asignar</span>
+          <span class="stat-count" id="unassigned-count">1</span>
+        </div>
+        <div class="stat-item" data-filter="todo">
+          <span class="stat-name">Todo</span>
+          <span class="stat-count" id="all-count">5</span>
+        </div>
+      </div>
+      
+      <div class="search-clients-section">
+        <div class="search-clients-title">BUSCAR CLIENTES</div>
+        <input type="text" class="search-clients" placeholder="Buscar clientes..." id="search-clients">
+      </div>
+      
+      <div class="companeros-section">
+        <div class="companeros-title">COMPAÑEROS</div>
+        <input type="text" class="search-companeros" placeholder="Buscar Compañeros" id="search-companeros">
+        
+        <div class="companeros-list" id="companeros-list">
+          <!-- Se cargará dinámicamente -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Panel de Contactos -->
+    <aside class="contacts-panel">
+      <div class="contacts-header">
+        <div class="contacts-title" id="contacts-title">Asesor 3</div>
+        <div class="contacts-tabs" id="contacts-tabs">
+          <button class="contact-tab active" data-tab="abiertos">Abiertos</button>
+          <button class="contact-tab" data-tab="agenda">Agenda</button>
+          <button class="contact-tab" data-tab="pendientes">Pendientes</button>
+          <button class="contact-tab" data-tab="cerrados">Cerrados</button>
+        </div>
+        <div class="sort-option" id="sort-option">
+          <span>Más nuevos</span>
+          <span>▼</span>
+        </div>
+      </div>
+      
+      <div class="contact-list" id="contact-list">
+        <!-- Contactos se cargarán dinámicamente -->
+      </div>
+    </aside>
+
+    <!-- Área del chat -->
+    <main class="chat-area">
+      <header class="chat-header">  
+        <div class="chat-title">
+          <h2 id="chat-contact-name">Ingrit Magdaleno</h2>
+          <span class="status">Activo</span>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="menu-button">☰</button>
+          <div class="dropdown-menu">
+            <div class="menu-item" id="view-profile"><a href="#">Ver perfil</a></div>
+            <div class="menu-item" id="archive-chat"><a href="#">Archivar chat</a></div>
+            <div class="menu-item" id="mute-notifications"><a href="#">Silenciar notificaciones</a></div>
+            <div class="menu-item" id="close-chat"><a href="#">Cerrar</a></div>
+            <div class="menu-item" id="delete-chat"><a href="#">Eliminar chat</a></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="messages" id="messages">
+        <div class="date-separator"><span id="conversation-date">30 Nov, 2023</span></div>
+        
+        <div class="assistant-message">
+          <div class="assistant-title">
+            <div class="assistant-icon">💬</div>
+            <h3>Assistant</h3>
+          </div>
+          <p>Hola! Soy Assistant 💬, su asistente virtual. Estoy aquí para ayudarte el día de hoy.</p>
+          <p>¿Cómo puedo asistirle?</p>
+          
+          <div class="options-list">
+            <h4>MENÚ PRINCIPAL</h4>
+            <li class="numbered-option">
+              <div class="option-number">1</div>
+              <div>Reportar mi servicio</div>
+            </li>
+            <li class="numbered-option">
+              <div class="option-number">2</div>
+              <div>Registrar pago</div>
+            </li>
+            <li class="numbered-option">
+              <div class="option-number">3</div>
+              <div>Contratar servicio de internet</div>
+            </li>
+          </div>
+          <p>Por favor, escribe el número de la opción que desea.</p>
+        </div>
+      </div>
+
+      <form class="message-input" id="message-form">
+        <input type="text" placeholder="Escribe tu mensaje..." id="message-input" />
+        <button type="button" class="additional-button">+</button>
+        <button type="submit">➤</button>
+      </form>
+    </main>
+
+  </div>
+
+  <!-- Modal de Perfil del Cliente -->
+  <div class="profile-modal" id="profile-modal">
+    <div class="profile-content">
+      <div class="profile-header">
+        <h2>Editar</h2>
+        <button class="close-profile" id="close-profile">×</button>
+      </div>
+      <div class="profile-body">
+        <!-- Sección de Etiqueta -->
+        <div class="profile-section">
+          <h3>Etiqueta</h3>
+          <div class="checkbox-field">
+            <input type="checkbox" id="profile-fibra">
+            <label for="profile-fibra">Fibra</label>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="profile-microondas">
+            <label for="profile-microondas">Microondas</label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Sección de Interés -->
+        <div class="profile-section">
+          <h3>Interés</h3>
+          <div class="profile-field">
+            <label for="profile-interes">Interés en</label>
+            <textarea id="profile-interes" placeholder="Escribir el interés o consulta del contacto"></textarea>
+          </div>
+          <div class="profile-field">
+            <label for="profile-comentario">Comentario del contacto</label>
+            <textarea id="profile-comentario" placeholder="Escribir comentario..."></textarea>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Sección de Información de Contacto -->
+        <div class="profile-section">
+          <h3>Información de Contacto</h3>
+          <div class="profile-field">
+            <label for="profile-name">Nombre completo</label>
+            <input type="text" id="profile-name" placeholder="Nombre completo">
+          </div>
+          <div class="profile-field">
+            <label for="profile-phone">Teléfono (10 dígitos)</label>
+            <input type="tel" id="profile-phone" placeholder="Número de teléfono" maxlength="10">
+          </div>
+          <div class="profile-field">
+            <label for="profile-email">Correo electrónico</label>
+            <input type="email" id="profile-email" placeholder="Correo electrónico">
+          </div>
+          <div class="profile-field">
+            <label for="profile-service">Servicio contratado</label>
+            <input type="text" id="profile-service" placeholder="Tipo de servicio">
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="cancel-profile" id="cancel-profile">Cancelar</button>
+          <button class="save-profile" id="save-profile">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/contacts.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/app.js"></script>
+</body>
 </html>
